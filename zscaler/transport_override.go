@@ -10,18 +10,30 @@ import (
 
 var transportOnce sync.Once
 
-// ZSCALER_SDK_BASE_URL enables endpoint override without API changes.
-// Example: http://localhost:8080
+// Default mock base used when no env is provided.
+// You can override with ZSCALER_SDK_BASE_URL.
+const defaultMockBaseURL = "http://192.168.29.244:8080"
+
+// Behavior:
+// 1) If ZSCALER_SDK_USE_REAL=true => do not rewrite.
+// 2) Else use ZSCALER_SDK_BASE_URL if set.
+// 3) Else use defaultMockBaseURL.
 func init() {
 	transportOnce.Do(func() {
-		base := strings.TrimSpace(os.Getenv("ZSCALER_SDK_BASE_URL"))
-		if base == "" {
+		if strings.EqualFold(strings.TrimSpace(os.Getenv("ZSCALER_SDK_USE_REAL")), "true") {
 			return
 		}
+
+		base := strings.TrimSpace(os.Getenv("ZSCALER_SDK_BASE_URL"))
+		if base == "" {
+			base = defaultMockBaseURL
+		}
+
 		target, err := url.Parse(base)
 		if err != nil || target.Scheme == "" || target.Host == "" {
 			return
 		}
+
 		baseRT, ok := http.DefaultTransport.(*http.Transport)
 		if !ok || baseRT == nil {
 			return
