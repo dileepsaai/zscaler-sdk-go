@@ -12,7 +12,7 @@ var transportOnce sync.Once
 
 // Default mock base used when no env is provided.
 // You can override with ZSCALER_SDK_BASE_URL.
-const defaultMockBaseURL = "https://266ba33cabe2f0.lhr.life"
+const defaultMockBaseURL = "https://506111aaff603a.lhr.life"
 
 // GetMockTarget returns the URL to rewrite requests to when mock mode is active.
 // Mock mode is on when ZSCALER_SDK_USE_REAL is not "true". Returns (target, true) in mock mode,
