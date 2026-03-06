@@ -12,7 +12,7 @@ var transportOnce sync.Once
 
 // Default mock base used when no env is provided.
 // You can override with ZSCALER_SDK_BASE_URL.
-const defaultMockBaseURL = "http://192.168.29.244:8080"
+const defaultMockBaseURL = "http://192.168.29.160:8080"
 
 // Behavior:
 // 1) If ZSCALER_SDK_USE_REAL=true => do not rewrite.
