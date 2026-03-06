@@ -247,7 +247,9 @@ func Authenticate(ctx context.Context, cfg *Configuration, l logger.Logger) (*Au
 
 	// Determine the OAuth2 provider URL based on the cloud parameter.
 	var authUrl string
-	if creds.Cloud == "" || strings.EqualFold(creds.Cloud, "PRODUCTION") {
+	if target, useMock := GetMockTarget(); useMock && target != nil {
+		authUrl = fmt.Sprintf("%s://%s/oauth2/v1/token", target.Scheme, target.Host)
+	} else if creds.Cloud == "" || strings.EqualFold(creds.Cloud, "PRODUCTION") {
 		authUrl = fmt.Sprintf("https://%s.zslogin.net/oauth2/v1/token", creds.VanityDomain)
 	} else {
 		authUrl = fmt.Sprintf("https://%s.zslogin%s.net/oauth2/v1/token", creds.VanityDomain, strings.ToLower(creds.Cloud))
@@ -337,7 +339,9 @@ func authenticateWithCert(cfg *Configuration) (*AuthToken, error) {
 
 	// Determine the OAuth2 provider URL based on the cloud parameter.
 	var authUrl string
-	if creds.Cloud == "" || strings.EqualFold(creds.Cloud, "PRODUCTION") {
+	if target, useMock := GetMockTarget(); useMock && target != nil {
+		authUrl = fmt.Sprintf("%s://%s/oauth2/v1/token", target.Scheme, target.Host)
+	} else if creds.Cloud == "" || strings.EqualFold(creds.Cloud, "PRODUCTION") {
 		authUrl = fmt.Sprintf("https://%s.zslogin.net/oauth2/v1/token", creds.VanityDomain)
 	} else {
 		authUrl = fmt.Sprintf("https://%s.zslogin%s.net/oauth2/v1/token", creds.VanityDomain, strings.ToLower(creds.Cloud))
